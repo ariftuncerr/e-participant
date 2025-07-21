@@ -14,13 +14,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
+        android:gravity="center"
         android:text="Kimlik Kartını Kameraya Gösterin"
+        android:textAlignment="center"
+        android:textColor="#B12C00"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#333333"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +34,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="56dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@+id/instructionCard"
@@ -55,10 +56,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
+        app:cardBackgroundColor="#E3F2FD"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="#E3F2FD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -72,19 +73,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="📋 Talimatlar:"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:textColor="#1976D2"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
                 android:text="• Kimlik kartınızı iyi aydınlatılmış bir yerde tutun\n• Kartı kameraya paralel tutun\n• Metin net görünene kadar bekleyin"
-                android:textSize="14sp"
                 android:textColor="#424242"
-                android:lineSpacingExtra="2dp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
