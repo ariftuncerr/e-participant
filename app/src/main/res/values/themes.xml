@@ -46,5 +46,51 @@
         <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+        <item name="textInputStyle">@style/Widget.MyApp.TextInputLayout.FilledBox</item>
+        <item name="buttonStyle">@style/Widget.MyApp.Button.Primary</item>
+
     </style>
+
+
+    <style name="Widget.MyApp.TextInputLayout.FilledBox" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <!-- Arka plan rengi -->
+        <item name="boxBackgroundColor">?attr/colorSurfaceVariant</item>
+
+        <!-- Kenar çizgileri -->
+        <item name="boxStrokeColor">?attr/colorPrimary</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+
+        <!-- Köşeleri yumuşat -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.MyApp.RoundedCorners</item>
+
+        <!-- Etiket ve hata renkleri -->
+        <item name="hintTextColor">?attr/colorOnSurfaceVariant</item>
+        <item name="errorTextColor">@color/md_theme_error</item>
+    </style>
+
+    <!-- Köşe yuvarlama stili -->
+    <style name="ShapeAppearance.MyApp.RoundedCorners" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <!-- button -->
+    <style name="Widget.MyApp.Button.Primary" parent="Widget.Material3.Button">
+        <!-- Arka plan ve metin rengi -->
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+
+        <!-- Köşeleri yumuşat -->
+        <item name="shapeAppearance">@style/ShapeAppearance.MyApp.RoundedCorners</item>
+
+        <!-- Harfleri küçültme -->
+        <item name="android:textAllCaps">false</item>
+
+        <!-- Yükseklik ve padding -->
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+    </style>
+
+
 </resources>

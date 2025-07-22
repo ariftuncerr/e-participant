@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class YoklamaAdapter(
@@ -13,14 +12,14 @@ class YoklamaAdapter(
 ) : RecyclerView.Adapter<YoklamaAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val isimTextView: TextView = view.findViewById(R.id.isimTextView)
-        val saatTextView: TextView = view.findViewById(R.id.saatTextView)
-        val durumTextView: TextView = view.findViewById(R.id.durumTextView)
+        val isimTextView: TextView = view.findViewById(R.id.nameTxtView)
+        val saatTextView: TextView = view.findViewById(R.id.checkInTime)
+        val durumTextView: TextView = view.findViewById(R.id.statusTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_yoklama, parent, false)
+            .inflate(R.layout.item_attendance, parent, false)
         return ViewHolder(view)
     }
 

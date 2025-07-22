@@ -15,7 +15,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/isimTextView"
+            android:id="@+id/nameTxtView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -24,7 +24,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/saatTextView"
+            android:id="@+id/checkInTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,7 +33,16 @@
             android:gravity="center" />
 
         <TextView
-            android:id="@+id/durumTextView"
+            android:id="@+id/checkOutTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="09:15"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/statusTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
