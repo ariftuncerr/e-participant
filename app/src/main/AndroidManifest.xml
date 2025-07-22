@@ -16,8 +16,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Stajokulu2025yoklama"
+        android:theme="@style/ThemeOverlay.AppTheme.MediumContrast"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="false" />
         <activity
             android:name=".GunlukYoklamaListActivity"
             android:exported="false" />

@@ -52,4 +52,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // ViewModel, LiveData
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
+
+    // Navigation, companent
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.9.1")
+    implementation( "androidx.navigation:navigation-ui-ktx:2.7.7")
 }

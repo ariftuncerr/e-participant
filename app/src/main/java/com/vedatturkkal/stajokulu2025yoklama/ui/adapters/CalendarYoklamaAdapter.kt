@@ -1,4 +1,4 @@
-package com.vedatturkkal.stajokulu2025yoklama
+package com.vedatturkkal.stajokulu2025yoklama.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.vedatturkkal.stajokulu2025yoklama.R
 
 class CalendarYoklamaAdapter(private val yoklamaList: List<CalendarYoklamaData>) :
     RecyclerView.Adapter<CalendarYoklamaAdapter.ViewHolder>() {

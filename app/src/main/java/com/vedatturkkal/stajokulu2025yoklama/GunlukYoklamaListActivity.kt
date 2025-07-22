@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vedatturkkal.stajokulu2025yoklama.ui.adapters.CalendarYoklamaAdapter
+import com.vedatturkkal.stajokulu2025yoklama.ui.adapters.CalendarYoklamaData
 
 class GunlukYoklamaListActivity : AppCompatActivity() {
 
