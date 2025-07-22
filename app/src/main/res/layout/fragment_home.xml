@@ -1,14 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeFragmentRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="16dp">
 
-</FrameLayout>
+        <!-- Başlık -->
+        <TextView
+            android:id="@+id/ActivitiesTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activities"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Exposed Dropdown Menu (Modern Spinner) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/activitiesDropdownLayout"
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Aktivite Seç"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/participantsRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ActivitiesTxt">
+
+            <AutoCompleteTextView
+                android:id="@+id/activitiesDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/md_theme_surfaceContainerHighest"
+                android:focusable="false"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Katılımcı Listesi -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/participantsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/activitiesDropdownLayout"
+            app:layout_constraintBottom_toTopOf="@id/addParticipantButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingVertical="8dp"
+            android:clipToPadding="false" />
+
+        <!-- Katılımcı Ekle Formu (Gizli) -->
+        <LinearLayout
+            android:id="@+id/addParticipantForm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/addActivityButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="12dp"
+            android:padding="8dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Katılımcı Adı">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/participantNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Katılımcı Ekle Butonu -->
+        <Button
+            android:id="@+id/addParticipantButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Yeni Katılımcı Ekle"
+            app:layout_constraintBottom_toTopOf="@id/addActivityButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Aktivite Ekle Butonu -->
+        <Button
+            android:id="@+id/addActivityButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Yeni Aktivite Ekle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
