@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_marginTop="32dp"
     android:background="#F5F5F5"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <!-- Header Card -->
@@ -12,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#2196F3"
         app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#2196F3">
+        app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,31 +26,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📊 Yoklama Listesi"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:layout_marginBottom="8dp" />
+                android:text="📊 Yoklama Listesi"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/stajyerDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loading..."
-                android:textSize="16sp"
-                android:textColor="@android:color/white"
+                android:layout_marginBottom="4dp"
                 android:gravity="center"
-                android:layout_marginBottom="4dp" />
+                android:text="Loading..."
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/stajyerTotalCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Toplam: 0 kişi"
-                android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -60,9 +61,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white">
+        app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,35 +74,35 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#E3F2FD"
                 android:orientation="horizontal"
-                android:padding="16dp"
-                android:background="#E3F2FD">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="No"
-                    android:textStyle="bold"
                     android:textColor="#1976D2"
-                    android:gravity="center" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Ad Soyad"
-                    android:textStyle="bold"
-                    android:textColor="#1976D2"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp" />
+                    android:paddingEnd="8dp"
+                    android:text="Ad Soyad"
+                    android:textColor="#1976D2"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="Saat"
-                    android:textStyle="bold"
                     android:textColor="#1976D2"
-                    android:gravity="center" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
