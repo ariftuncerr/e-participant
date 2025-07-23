@@ -26,11 +26,11 @@ class Home : AppCompatActivity() {
         yoklamaListe = findViewById(R.id.yoklamaListe)
         yoklamaTakvim = findViewById(R.id.yoklamaTakvim)
 
-        yoklamaAl.setOnClickListener {
+      /*  yoklamaAl.setOnClickListener {
             val intent = Intent(this, YoklamaCameraActivity::class.java)
             startActivity(intent)
         }
-
+*/
         yoklamaKontrol.setOnClickListener {
             val intent = Intent(this, YoklamaListActivity::class.java)
             startActivity(intent)

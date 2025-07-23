@@ -1,4 +1,4 @@
-package com.vedatturkkal.stajokulu2025yoklama
+/*package com.vedatturkkal.stajokulu2025yoklama
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -405,4 +405,4 @@ class YoklamaCameraActivity : AppCompatActivity() {
         super.onDestroy()
         recognizer.close()
     }
-}
+}*/
