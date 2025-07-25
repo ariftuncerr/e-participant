@@ -48,5 +48,4 @@ class ActivityRepository {
             false
         }
     }
-
 }
