@@ -19,7 +19,7 @@ class AuthRepository {
                     fireStore.collection("users").document(uid)
                         .set(user)
                         .addOnSuccessListener { onResult(true,null) }
-                        .addOnFailureListener { onResult(false,it.message) }
+                        .addOnFailureListener { onResult(false,"firestore hatası") }
 
                 }
                 else{

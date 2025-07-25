@@ -12,9 +12,9 @@ class CalendarYoklamaAdapter(private val yoklamaList: List<CalendarYoklamaData>)
     RecyclerView.Adapter<CalendarYoklamaAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val isimTextView: TextView = view.findViewById(R.id.nameTxtView)
+        val isimTextView: TextView = view.findViewById(R.id.pAttendText)
         val saatTextView: TextView = view.findViewById(R.id.checkInTime)
-        val durumTextView: TextView = view.findViewById(R.id.approvalText)
+        val durumTextView: TextView = view.findViewById(R.id.approvalTxt)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -66,4 +66,10 @@ dependencies {
     // Navigation, companent
     implementation ("androidx.navigation:navigation-fragment-ktx:2.9.1")
     implementation( "androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    //Firebase
+    implementation (platform("com.google.firebase:firebase-bom:33.16.0"))
+    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 }

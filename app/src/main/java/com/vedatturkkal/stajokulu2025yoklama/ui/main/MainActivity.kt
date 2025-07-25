@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             when(item.itemId){
                 R.id.action_home -> replaceFragment(HomeFragment())
                 R.id.action_takeAttendance -> replaceFragment(AttendanceFragment())
-                R.id.action_attendanceList -> replaceFragment(AttendanceFragment())
+                R.id.action_attendanceList -> replaceFragment(AttendanceScheduleFragment())
                 R.id.action_settings -> replaceFragment(SettingsFragment())
                 else -> true
             }
