@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.vedatturkkal.stajokulu2025yoklama.R
 
-// NFC ile kart isim bilgisi alınarak kullanıcının yoklaması alındığı kısım.
+// Kamera ile kart isim bilgisi alınarak kullanıcının yoklaması alındığı kısım.
+// Kullanıcı ismi kameradan dönecek. İsim boş değilse sistem saati ui tarafında görüncek.
+// tarih + saat
 class AttendanceFragment : Fragment() {
 
     override fun onCreateView(

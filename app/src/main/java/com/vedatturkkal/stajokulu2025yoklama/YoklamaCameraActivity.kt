@@ -1,6 +1,6 @@
-/*package com.vedatturkkal.stajokulu2025yoklama
+package com.vedatturkkal.stajokulu2025yoklama
 
-import android.Manifest
+/*import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -95,7 +95,6 @@ class YoklamaCameraActivity : AppCompatActivity() {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-
     private fun bindCameraUseCases(cameraProvider: ProcessCameraProvider) {
         val preview = Preview.Builder()
             .build()
