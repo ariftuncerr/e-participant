@@ -43,4 +43,15 @@ class MainViewModel : ViewModel() {
         _addParticipantResult.value = participantRepository.addParticipant(activityId,pName)
     }
 
+    private val _participantList = MutableStateFlow<List<Participant>>(emptyList())
+    val participantList : StateFlow<List<Participant>> = _participantList.asStateFlow()
+
+    fun getParticipants(activityId : String){
+        viewModelScope.launch {
+            participantRepository.getParticipants(activityId).collect { participants ->
+                _participantList.value = participants
+            }
+        }
+    }
+
 }
