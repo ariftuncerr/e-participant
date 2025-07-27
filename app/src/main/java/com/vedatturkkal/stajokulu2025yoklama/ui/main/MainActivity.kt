@@ -1,21 +1,29 @@
 package com.vedatturkkal.stajokulu2025yoklama.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.vedatturkkal.stajokulu2025yoklama.Home
 import com.vedatturkkal.stajokulu2025yoklama.R
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.databinding.ActivityMainBinding
+import com.vedatturkkal.stajokulu2025yoklama.ui.auth.LoginActivity
+import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
+import kotlin.getValue
 
 //navigasyonun ve ana view modelin aktivitesi.
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
+    private val mainViewModel : MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,8 +55,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val result = when(item.itemId){
-            R.id.action_logOut ->
+        when(item.itemId){
+            R.id.action_logOut ->{
+                AuthManager.signOut()
+                val intent = Intent(applicationContext, LoginActivity :: class.java)
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> true
         }
         return super.onOptionsItemSelected(item)
     }

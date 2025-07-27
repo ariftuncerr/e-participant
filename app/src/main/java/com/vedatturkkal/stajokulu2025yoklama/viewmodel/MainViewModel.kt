@@ -8,6 +8,8 @@ import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AttendanceRepository
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -76,6 +78,8 @@ class MainViewModel : ViewModel() {
             _addAttendanceResult.value = result
         }
     }
+
+    val currentUserEmail = AuthManager.getCurrentUser()?.email
 
 
 

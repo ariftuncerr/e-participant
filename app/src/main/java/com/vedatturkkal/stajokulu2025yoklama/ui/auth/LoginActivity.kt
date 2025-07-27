@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.databinding.ActivityLoginBinding
 import com.vedatturkkal.stajokulu2025yoklama.ui.main.MainActivity
 
@@ -41,5 +42,14 @@ class LoginActivity : AppCompatActivity() {
         binding.notRegistered.setOnClickListener {
             startActivity(Intent(this, RegisterActivity :: class.java))
         }
+    }
+
+    override fun onResume() {
+        if(AuthManager.getCurrentUser() != null){
+            val intent = Intent(applicationContext, MainActivity :: class.java)
+            startActivity(intent)
+            finish()
+        }
+        super.onResume()
     }
 }

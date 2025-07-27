@@ -27,11 +27,5 @@ class AuthViewModel : ViewModel() {
         }
 
     }
-    fun logout(){
-        repo.logout()
-    }
 
-    fun getCurrentUser() : FirebaseUser? {
-        return repo.getCurrentUser()
-    }
 }
