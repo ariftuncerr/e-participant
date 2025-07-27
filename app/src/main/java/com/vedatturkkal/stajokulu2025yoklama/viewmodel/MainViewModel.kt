@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
+import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +32,15 @@ class MainViewModel : ViewModel() {
                 _activitiesResult.value = activities
             }
         }
+    }
+
+    private val participantRepository = ParticipantRepository()
+
+    private val _addParticipantResult = MutableLiveData<Boolean>()
+    val addParticipantResult : LiveData<Boolean> = _addParticipantResult
+
+    suspend fun addParticipant(activityId : String, pName : String){
+        _addParticipantResult.value = participantRepository.addParticipant(activityId,pName)
     }
 
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.viewModels
@@ -15,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
+import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -25,12 +27,16 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private val mainViewModel : MainViewModel by viewModels()
+    private var selectedActivity : Activity? = null
+    private var userActivityList : List<Activity>? = emptyList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
 
+
+        //adding activity
         binding.addActiviyBtn.setOnClickListener { view ->
             if (binding.addActivityCard.isVisible) binding.addActivityCard.visibility = View.GONE else binding.addActivityCard.visibility = View.VISIBLE
 
@@ -48,14 +54,39 @@ class HomeFragment : Fragment() {
 
             }
 
-
         }
+        //selected activity
+        (binding.activitiesDropdown as AutoCompleteTextView).setOnItemClickListener { parent, view, position, id ->
+            selectedActivity = userActivityList?.get(position)
+            println("Seçilen aktivite: ${selectedActivity?.title}")
+        }
+
+        //adding participant to selected activity
+        binding.addParticipantBtn.setOnClickListener { l ->
+            val participantName = binding.participantEditText.text.toString()
+            if(participantName.isNotEmpty()){
+                selectedActivity?.let {
+                    lifecycleScope.launch {
+                        mainViewModel.addParticipant(selectedActivity!!.id,participantName)
+                    } ?: Snackbar.make(l,"Aktivite Seçmelisin!!", Snackbar.LENGTH_SHORT).show()
+                }
+
+            }
+            else{
+                Snackbar.make(l,"Katılımcı ismi girmelisin!!", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+
         observeViewModel()
 
         mainViewModel.getActivities()
         return binding.root
     }
     private fun observeViewModel(){
+        //observe add activity
         lifecycleScope.launch {
             mainViewModel.addActivityResult.observe (viewLifecycleOwner) { success ->
                 if (success)
@@ -65,22 +96,37 @@ class HomeFragment : Fragment() {
 
             }
         }
+        //observe getting activities
         lifecycleScope.launch {
             mainViewModel.activitiesResult.collectLatest { userActivitiesList ->
+                userActivityList = userActivitiesList
                 setUpUserActivities(userActivitiesList)
 
             }
         }
 
-    }
-    private fun setUpUserActivities(activitiesList : List<Activity>){
-        var activityNames = mutableListOf<String>()
-        for (activity in activitiesList){
-            activityNames.add(activity.title)
-            println(activity.title)
+        //observe adding participant to selected activity
+        lifecycleScope.launch {
+            mainViewModel.addParticipantResult.observe (viewLifecycleOwner){ success ->
+                if (success){
+                    Snackbar.make(binding.root,"Katılımcı Başarıyla Eklendi", Snackbar.LENGTH_SHORT).show()
+                    binding.participantEditText.text?.clear()
+                }
+                else
+                    Snackbar.make(binding.root,"Katılımcı eklenirken Hata Oluştu", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
-        val dropDownAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,android.R.id.text1,activityNames)
+
+
+    }
+    private fun setUpUserActivities(activitiesList : List<Activity>){
+        var activities = mutableListOf<Activity>()
+        for (activity in activitiesList){
+            activities.add(activity)
+        }
+
+        val dropDownAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,android.R.id.text1,activities)
        ( binding.activitiesDropdown as AutoCompleteTextView).setAdapter(dropDownAdapter)
 
     }

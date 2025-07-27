@@ -6,5 +6,10 @@ data class Activity(
     val id: String = UUID.randomUUID().toString(),
     val title: String = "",
     val dateCreated: Long = System.currentTimeMillis()
-)
+
+){
+    override fun toString(): String {
+        return title
+    }
+}
 

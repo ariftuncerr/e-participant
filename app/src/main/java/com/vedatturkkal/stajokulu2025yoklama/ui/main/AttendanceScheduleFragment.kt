@@ -29,9 +29,9 @@ class AttendanceScheduleFragment : Fragment() {
 
     private fun setUpRecyclerView(){
 
-        val p1 = Participant("1","123","Vedat")
-        val p2 = Participant("2","234","Arif")
-        val p3 = Participant("3","567","Ahmet")
+        val p1 = Participant(uuid = "123", name = "Vedat")
+        val p2 = Participant(uuid = "234", name = "Arif")
+        val p3 = Participant(uuid = "567", name = "Ahmet")
 
         val pA1 = ParticipantAttendance(participant = p1 , checkInTime = "09.10", checkOutTime = "16.00",approval = true)
         val pA2 = ParticipantAttendance(participant = p2, checkInTime = "09.11", checkOutTime = "16.01",approval = true)
