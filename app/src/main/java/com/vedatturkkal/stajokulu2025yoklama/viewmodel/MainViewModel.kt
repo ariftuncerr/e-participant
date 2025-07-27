@@ -3,8 +3,13 @@ package com.vedatturkkal.stajokulu2025yoklama.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
     private val activityRepository = ActivityRepository()
@@ -12,7 +17,19 @@ class MainViewModel : ViewModel() {
     private val _addActivityResult = MutableLiveData<Boolean>()
     val addActivityResult : LiveData<Boolean> = _addActivityResult
 
+    private val _activitiesResult = MutableStateFlow<List<Activity>>(emptyList())
+    val activitiesResult : StateFlow<List<Activity>> = _activitiesResult.asStateFlow()
+
+
     suspend fun createActivity(activity: Activity){
         _addActivityResult.value = activityRepository.createActivity(activity)
     }
+     fun getActivities(){
+        viewModelScope.launch {
+            activityRepository.getActivities().collect { activities ->
+                _activitiesResult.value = activities
+            }
+        }
+    }
+
 }

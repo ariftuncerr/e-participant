@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.fragment.app.viewModels
 import com.vedatturkkal.stajokulu2025yoklama.R
 import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentHomeBinding
@@ -13,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 //Kullanıcı ismi Etkinlik Adı yer alacak fragment
@@ -29,7 +32,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
 
         binding.addActiviyBtn.setOnClickListener { view ->
-            if (binding.addActivityCard.isVisible) View.GONE else View.VISIBLE
+            if (binding.addActivityCard.isVisible) binding.addActivityCard.visibility = View.GONE else binding.addActivityCard.visibility = View.VISIBLE
 
             binding.addActivityButton.setOnClickListener { view ->
                 val activityTitle = binding.addActivityEditText.text.toString()
@@ -38,7 +41,7 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch {
                         mainViewModel.createActivity(activity)
                     }
-
+                    binding.addActivityCard.visibility = View.GONE
                 }
                 else
                     Snackbar.make(view,"Aktivite Başlığı Girmelisin!!", Snackbar.LENGTH_SHORT).show()
@@ -49,6 +52,7 @@ class HomeFragment : Fragment() {
         }
         observeViewModel()
 
+        mainViewModel.getActivities()
         return binding.root
     }
     private fun observeViewModel(){
@@ -61,6 +65,23 @@ class HomeFragment : Fragment() {
 
             }
         }
+        lifecycleScope.launch {
+            mainViewModel.activitiesResult.collectLatest { userActivitiesList ->
+                setUpUserActivities(userActivitiesList)
+
+            }
+        }
+
+    }
+    private fun setUpUserActivities(activitiesList : List<Activity>){
+        var activityNames = mutableListOf<String>()
+        for (activity in activitiesList){
+            activityNames.add(activity.title)
+            println(activity.title)
+        }
+
+        val dropDownAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,android.R.id.text1,activityNames)
+       ( binding.activitiesDropdown as AutoCompleteTextView).setAdapter(dropDownAdapter)
 
     }
 
