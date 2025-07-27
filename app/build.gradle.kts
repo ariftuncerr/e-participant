@@ -58,6 +58,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.google.guava:guava:31.1-android")
 
     // ViewModel, LiveData
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
