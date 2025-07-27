@@ -34,5 +34,4 @@ class AuthViewModel : ViewModel() {
     fun getCurrentUser() : FirebaseUser? {
         return repo.getCurrentUser()
     }
-
 }

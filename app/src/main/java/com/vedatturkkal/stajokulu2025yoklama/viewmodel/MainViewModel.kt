@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.AttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,6 +62,18 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             val result = participantRepository.deleteParticipant(activityId, participantId)
             _deleteParticipantResult.value = result
+        }
+    }
+
+    private val attendanceRepository = AttendanceRepository()
+
+    private val _addAttendanceResult = MutableLiveData<Boolean>()
+    val addAttendanceResult : LiveData<Boolean> = _addAttendanceResult
+
+    fun addAttendance(activityId: String, date: String){
+        viewModelScope.launch {
+            val result = attendanceRepository.addAttendance(activityId,date)
+            _addAttendanceResult.value = result
         }
     }
 
