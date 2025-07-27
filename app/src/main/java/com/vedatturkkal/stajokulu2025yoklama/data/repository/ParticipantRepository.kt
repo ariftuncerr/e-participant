@@ -70,4 +70,23 @@ class ParticipantRepository {
 
         awaitClose { listener.remove() }
     }
+
+    suspend fun deleteParticipant(activityId: String, participantId: Int): Boolean {
+        val uid = auth.currentUser?.uid ?: return false
+        return try {
+            firestore.collection("users")
+                .document(uid)
+                .collection("activities")
+                .document(activityId)
+                .collection("participants")
+                .document(participantId.toString())
+                .delete()
+                .await()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+
 }

@@ -54,4 +54,17 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private val _deleteParticipantResult = MutableLiveData<Boolean>()
+    val deleteParticipantResult: LiveData<Boolean> = _deleteParticipantResult
+
+    fun deleteParticipant(activityId: String, participantId: Int) {
+        viewModelScope.launch {
+            val result = participantRepository.deleteParticipant(activityId, participantId)
+            _deleteParticipantResult.value = result
+        }
+    }
+
+
+
+
 }

@@ -9,8 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vedatturkkal.stajokulu2025yoklama.R
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
 
-class ParticipantListAdapter (context: android.content.Context, private var participantList: List<Participant>)
-    : RecyclerView.Adapter<ParticipantListAdapter.ParticipantItemHolder>(){
+class ParticipantListAdapter (
+    context: android.content.Context,
+    private var participantList: List<Participant>,
+    private val onDeleteClick: (Participant) -> Unit
+): RecyclerView.Adapter<ParticipantListAdapter.ParticipantItemHolder>(){
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -24,10 +28,10 @@ class ParticipantListAdapter (context: android.content.Context, private var part
         position: Int
     ) {
         holder.participantName.text = participantList[position].name
-
+        val participant = participantList[position]
         // seçilen katılımcıyı listeden siler
-        holder.deleteParticipantBtn.setOnClickListener { l ->
-
+        holder.deleteParticipantBtn.setOnClickListener {
+            onDeleteClick(participant)
         }
     }
 

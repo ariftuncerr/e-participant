@@ -149,11 +149,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun showParticipants(pList: List<Participant>) {
-        participantListAdapter = ParticipantListAdapter(requireContext(), pList)
+        participantListAdapter = ParticipantListAdapter(requireContext(), pList) { participant ->
+            selectedActivity?.let {
+                mainViewModel.deleteParticipant(it.id, participant.id)
+            }
+        }
 
-        binding.participantsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.participantsRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.participantsRecyclerView.adapter = participantListAdapter
     }
+
+
     private fun updateParticipantList(pList: List<Participant>) {
         participantListAdapter.updateList(pList)
     }
