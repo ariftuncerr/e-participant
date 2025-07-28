@@ -73,4 +73,19 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
+
+
+    implementation("androidx.camera:camera-core:1.3.1")
+    implementation("androidx.camera:camera-camera2:1.3.1")
+    implementation("androidx.camera:camera-lifecycle:1.3.1")
+    implementation("androidx.camera:camera-view:1.3.1")
+    implementation("androidx.camera:camera-extensions:1.3.1") // opsiyonel
+
+    // ML Kit Text Recognition
+    implementation("com.google.mlkit:text-recognition:16.0.0")
+
+    // Lifecycle (zaten varsa birleştir)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+
 }

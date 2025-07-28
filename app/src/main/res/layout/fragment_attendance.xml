@@ -22,10 +22,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+            app:layout_constraintTop_toBottomOf="@+id/activitiesSpinner" />
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/activitiesSpinner"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginStart="8dp"
@@ -38,7 +38,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/approveImageView"
             android:layout_width="58dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
@@ -54,8 +54,8 @@
             android:layout_marginStart="16dp"
             android:text="Katılımıcı İsmi"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintStart_toEndOf="@+id/imageView2" />
+            app:layout_constraintBottom_toBottomOf="@+id/approveImageView"
+            app:layout_constraintStart_toEndOf="@+id/approveImageView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -64,7 +64,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintBottom_toTopOf="@+id/approveImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/startAttendanceBtn">
