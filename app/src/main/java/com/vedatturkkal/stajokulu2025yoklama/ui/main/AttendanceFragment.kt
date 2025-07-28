@@ -3,37 +3,86 @@ package com.vedatturkkal.stajokulu2025yoklama.ui.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentAttendanceBinding
+import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+
 
 class AttendanceFragment : Fragment() {
     private var _binding: FragmentAttendanceBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: MainViewModel by viewModels()
+
 
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     private val isProcessing = AtomicBoolean(false)
 
     private lateinit var cameraProvider: ProcessCameraProvider
     private var recognizedName: String? = null
+    private var selectedActivity: Activity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
 
+        // Spinner için aktiviteleri yükle
+        viewModel.getActivities()
+        lifecycleScope.launch {
+            viewModel.activitiesResult.collectLatest { activityList ->
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    activityList
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.activitiesSpinner.adapter = adapter
+
+                // Spinner seçimi güncelle
+                binding.activitiesSpinner.setSelection(0)
+                selectedActivity = activityList.firstOrNull()
+
+                binding.activitiesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        selectedActivity = activityList.getOrNull(position)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        selectedActivity = null
+                    }
+                }
+
+            }
+        }
+
         binding.startAttendanceBtn.setOnClickListener {
+            if (selectedActivity == null) {
+                Toast.makeText(requireContext(), "Lütfen bir aktivite seçin", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            viewModel.addAttendance(selectedActivity!!.id, currentDate)
             checkPermissionAndStartCamera()
         }
 
@@ -59,11 +108,19 @@ class AttendanceFragment : Fragment() {
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
         cameraProviderFuture.addListener({
-            cameraProvider = cameraProviderFuture.get()
-            bindCameraUseCases()
+            try {
+                cameraProvider = cameraProviderFuture.get()
+
+                bindCameraUseCases()
+
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Kamera başlatılamadı: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
+
 
     private fun bindCameraUseCases() {
         val preview = Preview.Builder().build().also {
@@ -110,8 +167,11 @@ class AttendanceFragment : Fragment() {
                         recognizedName = result
                         binding.participantName.text = result
                         binding.doneScan.visibility = View.VISIBLE
-                        cameraProvider.unbindAll()
                         Toast.makeText(requireContext(), "Katılımcı: $result", Toast.LENGTH_SHORT).show()
+
+                        cameraProvider.unbindAll()
+                        isProcessing.set(false)
+                        startCamera()
                     }
                 }
             }
