@@ -3,10 +3,10 @@ package com.vedatturkkal.stajokulu2025yoklama.ui.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.OptIn
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -15,73 +15,80 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentAttendanceBinding
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicBoolean
 
 class AttendanceFragment : Fragment() {
-
     private var _binding: FragmentAttendanceBinding? = null
     private val binding get() = _binding!!
 
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     private val isProcessing = AtomicBoolean(false)
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) startCamera()
-        else Toast.makeText(requireContext(), "Kamera izni gerekli", Toast.LENGTH_SHORT).show()
-    }
+    private lateinit var cameraProvider: ProcessCameraProvider
+    private var recognizedName: String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
+
+        binding.startAttendanceBtn.setOnClickListener {
+            checkPermissionAndStartCamera()
+        }
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        checkCameraPermission()
-    }
-
-    private fun checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_GRANTED) {
+    private fun checkPermissionAndStartCamera() {
+        val permission = Manifest.permission.CAMERA
+        if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
-            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            requestPermissions(arrayOf(permission), 101)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 101 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startCamera()
+        } else {
+            Toast.makeText(requireContext(), "Kamera izni gerekli", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.previewView.surfaceProvider)
-            }
-
-            val analyzer = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-
-            analyzer.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
-                processImageProxy(imageProxy)
-            }
-
-            val selector = CameraSelector.DEFAULT_BACK_CAMERA
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(viewLifecycleOwner, selector, preview, analyzer)
-
-            updateStatus("Kimlik kartınızı kameraya gösterin")
-
+            cameraProvider = cameraProviderFuture.get()
+            bindCameraUseCases()
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    @OptIn(ExperimentalGetImage::class)
+    private fun bindCameraUseCases() {
+        val preview = Preview.Builder().build().also {
+            it.setSurfaceProvider(binding.cameraView.surfaceProvider)
+        }
+
+        val analyzer = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+
+        analyzer.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
+            processImageProxy(imageProxy)
+        }
+
+        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+        try {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview, analyzer)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Kamera başlatılamadı: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @androidx.annotation.OptIn(ExperimentalGetImage::class)
     private fun processImageProxy(imageProxy: ImageProxy) {
         if (isProcessing.get()) {
             imageProxy.close()
@@ -94,80 +101,73 @@ class AttendanceFragment : Fragment() {
         }
 
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                handleTextRecognitionResult(visionText.text)
+                val result = extractNameAndDetailsFromText(visionText.text)
+                if (!result.isNullOrBlank()) {
+                    if (isProcessing.compareAndSet(false, true)) {
+                        recognizedName = result
+                        binding.participantName.text = result
+                        binding.doneScan.visibility = View.VISIBLE
+                        cameraProvider.unbindAll()
+                        Toast.makeText(requireContext(), "Katılımcı: $result", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .addOnFailureListener {
-                updateStatus("Metin tanıma hatası, tekrar deneyin...")
+                Toast.makeText(requireContext(), "Tanıma hatası", Toast.LENGTH_SHORT).show()
             }
-            .addOnCompleteListener { imageProxy.close() }
+            .addOnCompleteListener {
+                imageProxy.close()
+            }
     }
 
-    private fun handleTextRecognitionResult(text: String) {
-        if (text.isBlank()) return
-
+    private fun extractNameAndDetailsFromText(text: String): String? {
         val lines = text.lines()
-        var name: String? = null
         var surname: String? = null
+        var name: String? = null
 
         lines.forEachIndexed { i, line ->
-            val l = line.trim()
-            if (l.contains("Adı", true)) name = lines.getOrNull(i + 1)?.trim()
-            if (l.contains("Soyadı", true)) surname = lines.getOrNull(i + 1)?.trim()
-        }
+            val cleanLine = line.trim()
 
-        if (!name.isNullOrBlank() && !surname.isNullOrBlank()) {
-            val fullName = "$name $surname"
-            if (isProcessing.compareAndSet(false, true)) {
-                saveAttendance(fullName)
+            if (cleanLine.contains("Soyadı", true) || cleanLine.contains("Surname", true)) {
+                surname = lines.getOrNull(i + 1)?.trim().takeIf { !it.isNullOrBlank() }
+                    ?: cleanLine.split(":").getOrNull(1)?.trim()
+            }
+
+            if (cleanLine.contains("Adı", true) || cleanLine.contains("Given Name", true)) {
+                name = lines.getOrNull(i + 1)?.trim().takeIf { !it.isNullOrBlank() }
+                    ?: cleanLine.split(":").getOrNull(1)?.trim()
             }
         }
+
+        surname = surname?.replace(Regex("[^a-zA-ZğüşıöçĞÜŞİÖÇ\\s]"), "")?.trim()
+        name = name?.replace(Regex("[^a-zA-ZğüşıöçĞÜŞİÖÇ\\s]"), "")?.trim()
+
+        return if (!surname.isNullOrBlank() && !name.isNullOrBlank() &&
+            isValidName(name) && isValidName(surname)) {
+            "$name $surname"
+        } else null
     }
 
-    private fun saveAttendance(fullName: String) {
-        showProcessing(true)
-        updateStatus("İşleniyor...")
-
-        val prefs = requireContext().getSharedPreferences("YoklamaPrefs", 0)
-        val today = LocalDate.now().toString()
-        val oldData = prefs.getString("yoklama_$today", "") ?: ""
-
-        if (oldData.contains(fullName)) {
-            Toast.makeText(requireContext(), "$fullName zaten kaydedilmiş!", Toast.LENGTH_SHORT).show()
-            resetProcess()
-            return
-        }
-
-        val now = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
-        val newEntry = if (oldData.isEmpty()) "$fullName|$now" else "$oldData\n$fullName|$now"
-
-        prefs.edit().putString("yoklama_$today", newEntry).apply()
-
-        Toast.makeText(requireContext(), "$fullName başarıyla kaydedildi!", Toast.LENGTH_LONG).show()
-        resetProcess()
-    }
-
-    private fun resetProcess() {
-        isProcessing.set(false)
-        showProcessing(false)
-        updateStatus("Kimlik kartınızı kameraya gösterin")
-    }
-
-    private fun showProcessing(show: Boolean) {
-        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    private fun updateStatus(msg: String) {
-        binding.stajyerStatus.apply {
-            text = msg
-            visibility = View.VISIBLE
-        }
+    private fun isValidName(name: String): Boolean {
+        if (name.length < 2) return false
+        val suspiciousPatterns = listOf(
+            Regex("[0-9]"),
+            Regex("[^a-zA-ZğüşıöçĞÜŞİÖÇ\\s]"),
+            Regex(".*[aeiouıAEIOUI]{4,}.*"),
+            Regex(".*[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]{5,}.*"),
+            Regex(".*[XQW].*", RegexOption.IGNORE_CASE),
+            Regex(".*[0O]{2,}.*"),
+            Regex(".*[Il1]{3,}.*")
+        )
+        return suspiciousPatterns.none { it.matches(name) }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recognizer.close()
         _binding = null
+        recognizer.close()
     }
 }

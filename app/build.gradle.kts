@@ -58,19 +58,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:31.1-android")
 
     // ViewModel, LiveData
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
-    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
 
-    // Navigation, component
-    implementation (libs.androidx.navigation.fragment.ktx)
-    implementation( libs.androidx.navigation.ui.ktx)
+    // Navigation, companent
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.9.1")
+    implementation( "androidx.navigation:navigation-ui-ktx:2.7.7")
 
     //Firebase
-    implementation (platform(libs.firebase.bom))
-    implementation (libs.firebase.auth.ktx)
-    implementation (libs.play.services.auth)
-    implementation(libs.firebase.firestore.ktx)
+    implementation (platform("com.google.firebase:firebase-bom:33.16.0"))
+    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 }
