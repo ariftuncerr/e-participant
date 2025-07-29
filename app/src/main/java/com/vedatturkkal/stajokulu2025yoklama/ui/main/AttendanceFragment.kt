@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.internal.mlkit_vision_text_bundled_common.zbid
+import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -32,11 +34,11 @@ class AttendanceFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModels()
 
-
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     private val isProcessing = AtomicBoolean(false)
 
     private lateinit var cameraProvider: ProcessCameraProvider
+    private var currentAttendanceId : String? = null
     private var recognizedName: String? = null
     private var selectedActivity: Activity? = null
 
@@ -83,12 +85,44 @@ class AttendanceFragment : Fragment() {
 
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             viewModel.addAttendance(selectedActivity!!.id, currentDate)
+
+
             checkPermissionAndStartCamera()
         }
 
+        observeViewModel()
         return binding.root
     }
+    private fun addAllParticipantToAttendance(){
+         viewModel.addAllPtToAttendance(selectedActivity?.id ?: "", currentAttendanceId.toString())
 
+    }
+    private fun observeViewModel(){
+        // add attendance result
+        viewModel.addAttendanceResult.observe (viewLifecycleOwner){ result ->
+            val (success,attendanceId) = result
+            if (success) {
+                Snackbar.make(binding.root, "Yoklama Başlatıldı", Snackbar.LENGTH_SHORT).show()
+                currentAttendanceId = attendanceId
+
+                //succes durumunda katılımcıları başlatılan yoklamaya dahil et
+                addAllParticipantToAttendance()
+            }
+            else{
+                Snackbar.make(binding.root,"Yoklama Başlatılırken Hata!", Snackbar.LENGTH_SHORT).show()
+            }
+
+        }
+
+        // add all participant result
+        viewModel.addAllResult.observe (viewLifecycleOwner) { success ->
+            if (!success)
+                Snackbar.make(binding.root,"Yoklama Başlatılırken Hata! Tekrar deneyin", Snackbar.LENGTH_SHORT).show()
+
+        }
+
+
+    }
     private fun checkPermissionAndStartCamera() {
         val permission = Manifest.permission.CAMERA
         if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
@@ -230,4 +264,5 @@ class AttendanceFragment : Fragment() {
         _binding = null
         recognizer.close()
     }
+
 }

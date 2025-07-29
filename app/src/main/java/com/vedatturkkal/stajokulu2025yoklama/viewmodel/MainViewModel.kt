@@ -70,8 +70,8 @@ class MainViewModel : ViewModel() {
 
     private val attendanceRepository = AttendanceRepository()
 
-    private val _addAttendanceResult = MutableLiveData<Boolean>()
-    val addAttendanceResult : LiveData<Boolean> = _addAttendanceResult
+    private val _addAttendanceResult = MutableLiveData< Pair<Boolean,String?>>()
+    val addAttendanceResult : LiveData<Pair<Boolean, String?>> get() = _addAttendanceResult
 
     fun addAttendance(activityId: String, date: String){
         viewModelScope.launch {
@@ -89,8 +89,10 @@ class MainViewModel : ViewModel() {
 
     fun addAllPtToAttendance(activityId : String, attendanceId : String){
         viewModelScope.launch {
-            participantAttendanceRepository.addAllParticipantsToAttendance(activityId,attendanceId)
+            val result = participantAttendanceRepository.addAllParticipantsToAttendance(activityId,attendanceId)
+            _addAllResult.value = result
         }
+
     }
 
     private val _approveParticipantResult = MutableLiveData<Boolean>()
@@ -99,13 +101,10 @@ class MainViewModel : ViewModel() {
     fun approveParticipant( activityId: String,
                             attendanceId: String,
                             participantId: Int){
-        participantAttendanceRepository.approveParticipant()
+        viewModelScope.launch {
+            val result = participantAttendanceRepository.approveParticipant(activityId,attendanceId,participantId)
+            _approveParticipantResult.value = result
+        }
     }
-
-
-
-
-
-
 
 }
