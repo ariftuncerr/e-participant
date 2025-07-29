@@ -10,6 +10,7 @@ import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthRepository
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantAttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -80,6 +81,29 @@ class MainViewModel : ViewModel() {
     }
 
     val currentUserEmail = AuthManager.getCurrentUser()?.email
+
+    private val participantAttendanceRepository = ParticipantAttendanceRepository()
+
+    private val _addAllResult = MutableLiveData<Boolean>()
+    val addAllResult : LiveData<Boolean> = _addAllResult
+
+    fun addAllPtToAttendance(activityId : String, attendanceId : String){
+        viewModelScope.launch {
+            participantAttendanceRepository.addAllParticipantsToAttendance(activityId,attendanceId)
+        }
+    }
+
+    private val _approveParticipantResult = MutableLiveData<Boolean>()
+    val approveParticipantResult : LiveData<Boolean> = _approveParticipantResult
+
+    fun approveParticipant( activityId: String,
+                            attendanceId: String,
+                            participantId: Int){
+        participantAttendanceRepository.approveParticipant()
+    }
+
+
+
 
 
 
