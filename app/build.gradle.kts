@@ -41,7 +41,7 @@ android {
 
 dependencies {
 
-    // CameraX
+    // CameraX & UI
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
@@ -58,7 +58,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.guava:guava:31.1-android")
+    implementation("com.google.guava:guava:33.4.8-android")
 
     // ViewModel, LiveData
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
