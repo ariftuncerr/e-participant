@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,20 +25,24 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
-
 class AttendanceFragment : Fragment() {
+
     private var _binding: FragmentAttendanceBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels()
 
-
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     private val isProcessing = AtomicBoolean(false)
 
     private lateinit var cameraProvider: ProcessCameraProvider
+    private lateinit var previewView: PreviewView
+    private lateinit var cameraExecutor: ExecutorService
+
     private var recognizedName: String? = null
     private var selectedActivity: Activity? = null
 
@@ -45,8 +51,40 @@ class AttendanceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // Spinner için aktiviteleri yükle
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Runtime’da PreviewView oluşturup cameraContainer içine ekle
+        previewView = PreviewView(requireContext()).apply {
+            layoutParams = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        binding.cameraContainer.addView(previewView, 0) // Placeholder’ın altına ekle
+
+        // Placeholder’ı gizle (XML’de varsayılan görünür)
+        binding.cameraPlaceholder.visibility = View.GONE
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
+        setupSpinner()
+
+        binding.startAttendanceBtn.setOnClickListener {
+            if (selectedActivity == null) {
+                Toast.makeText(requireContext(), "Lütfen bir aktivite seçin", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            viewModel.addAttendance(selectedActivity!!.id, currentDate)
+            checkPermissionAndStartCamera()
+        }
+    }
+
+    private fun setupSpinner() {
         viewModel.getActivities()
         lifecycleScope.launch {
             viewModel.activitiesResult.collectLatest { activityList ->
@@ -58,7 +96,6 @@ class AttendanceFragment : Fragment() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.activitiesSpinner.adapter = adapter
 
-                // Spinner seçimi güncelle
                 binding.activitiesSpinner.setSelection(0)
                 selectedActivity = activityList.firstOrNull()
 
@@ -71,22 +108,8 @@ class AttendanceFragment : Fragment() {
                         selectedActivity = null
                     }
                 }
-
             }
         }
-
-        binding.startAttendanceBtn.setOnClickListener {
-            if (selectedActivity == null) {
-                Toast.makeText(requireContext(), "Lütfen bir aktivite seçin", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-            viewModel.addAttendance(selectedActivity!!.id, currentDate)
-            checkPermissionAndStartCamera()
-        }
-
-        return binding.root
     }
 
     private fun checkPermissionAndStartCamera() {
@@ -112,19 +135,16 @@ class AttendanceFragment : Fragment() {
         cameraProviderFuture.addListener({
             try {
                 cameraProvider = cameraProviderFuture.get()
-
                 bindCameraUseCases()
-
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Kamera başlatılamadı: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-
     private fun bindCameraUseCases() {
         val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(binding.cameraView.surfaceProvider)
+            it.setSurfaceProvider(previewView.surfaceProvider)
         }
 
         val analyzer = ImageAnalysis.Builder()
@@ -229,5 +249,6 @@ class AttendanceFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         recognizer.close()
+        cameraExecutor.shutdown()
     }
 }
