@@ -2,11 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.AttendanceFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -36,7 +38,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <ImageView
             android:id="@+id/approveImageView"
             android:layout_width="58dp"
@@ -58,6 +59,7 @@
             app:layout_constraintStart_toEndOf="@+id/approveImageView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cameraContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
@@ -69,14 +71,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/startAttendanceBtn">
 
-            <view
-                android:id="@+id/cameraView"
-                class="androidx.camera.view.PreviewView"
+            <!-- Tasarım editörü için placeholder -->
+            <ImageView
+                android:id="@+id/cameraPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="36dp"
-                tools:layout_editor_absoluteY="142dp" />
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/camera_placeholder" />
 
+
+            <!-- doneScan ImageView -->
             <ImageView
                 android:id="@+id/doneScan"
                 android:layout_width="0dp"
@@ -87,9 +91,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cameraView" />
+                app:layout_constraintTop_toTopOf="@+id/cameraPlaceholder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>
