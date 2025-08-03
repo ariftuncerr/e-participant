@@ -17,6 +17,7 @@ import com.vedatturkkal.stajokulu2025yoklama.R
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.databinding.ActivityMainBinding
 import com.vedatturkkal.stajokulu2025yoklama.ui.auth.LoginActivity
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.AttendanceFragment
 import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
 import kotlin.getValue
 

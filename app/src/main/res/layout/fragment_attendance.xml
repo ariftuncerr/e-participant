@@ -4,92 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.AttendanceFragment">
+    tools:context=".ui.main.attendance.AttendanceFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-158dp">
 
         <Button
             android:id="@+id/startAttendanceBtn"
-            android:layout_width="0dp"
+            android:layout_width="379dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:onClick="startAttendanceClick"
             android:text="Yoklama Başlat"
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/methodsSpinner" />
+
+        <Button
+            android:id="@+id/createAttendanceBtn"
+            android:layout_width="379dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="startAttendanceClick"
+            android:text="Yoklama Oluştur"
+            app:cornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activitiesSpinner" />
 
         <Spinner
             android:id="@+id/activitiesSpinner"
-            android:layout_width="0dp"
+            android:layout_width="379dp"
             android:layout_height="54dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.34"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/choseActivityTxt" />
 
-
-        <ImageView
-            android:id="@+id/approveImageView"
-            android:layout_width="58dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/outline_close_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <Spinner
+            android:id="@+id/methodsSpinner"
+            android:layout_width="379dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chooseMethodTxt" />
 
         <TextView
-            android:id="@+id/participantName"
+            android:id="@+id/choseActivityTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Katılımıcı İsmi"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/approveImageView"
-            app:layout_constraintStart_toEndOf="@+id/approveImageView" />
+            android:layout_marginTop="32dp"
+            android:text="Aktivite"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/chooseMethodTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Metot"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createAttendanceBtn" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/approveImageView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startAttendanceBtn">
+            app:layout_constraintTop_toBottomOf="@+id/startAttendanceBtn" />
 
-            <view
-                android:id="@+id/cameraView"
-                class="androidx.camera.view.PreviewView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="36dp"
-                tools:layout_editor_absoluteY="142dp" />
-
-            <ImageView
-                android:id="@+id/doneScan"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/sharp_done_24"
-                android:visibility="gone"
-                android:contentDescription="Taranan veri onaylandı"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cameraView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
