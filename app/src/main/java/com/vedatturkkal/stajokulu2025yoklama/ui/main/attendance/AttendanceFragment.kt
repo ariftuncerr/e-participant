@@ -39,6 +39,7 @@ class AttendanceFragment : Fragment() {
     ): View {
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
         val view : View = binding.root
+
         setupActivitySpinner()
         setupMethodSpinner()
         observeViewModel()
@@ -63,10 +64,13 @@ class AttendanceFragment : Fragment() {
 
             dialog.show(parentFragmentManager, "ManualEntryDialog")
         }
+        else if (selectedMethod == "Kimlik ile" && selectedActivity != null && currentAttendanceId != null) {
+            val dialog = IdentityVerificationDialogFragment(selectedActivity!!.id,currentAttendanceId!!,participantList)
+
+            dialog.show(parentFragmentManager, "IdentifyVerificationDialog")
+        }
         else Snackbar.make(binding.root,"Aktivite ve Method seçimi Zorunlu!", Snackbar.LENGTH_SHORT).show()
     }
-
-
 
 
     private fun getAllParticipants(){

@@ -101,7 +101,9 @@ class MainViewModel : ViewModel() {
     fun approveParticipant( activityId: String,
                             attendanceId: String,
                             participantId: Int){
+
         viewModelScope.launch {
+
             val result = participantAttendanceRepository.approveParticipant(activityId,attendanceId,participantId)
             _approveParticipantResult.value = result
         }
