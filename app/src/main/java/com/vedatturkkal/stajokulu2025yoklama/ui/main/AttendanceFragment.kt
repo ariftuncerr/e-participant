@@ -1,6 +1,6 @@
 package com.vedatturkkal.stajokulu2025yoklama.ui.main
 
-import android.Manifest
+/*import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AttendanceFragment : Fragment() {
+/*class AttendanceFragment : Fragment() {
 
     private var _binding: FragmentAttendanceBinding? = null
     private val binding get() = _binding!!
@@ -252,3 +252,4 @@ class AttendanceFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 }
+*/

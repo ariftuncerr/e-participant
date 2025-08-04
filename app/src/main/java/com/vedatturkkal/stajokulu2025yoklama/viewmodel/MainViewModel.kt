@@ -10,6 +10,7 @@ import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthRepository
+import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantAttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,8 +70,8 @@ class MainViewModel : ViewModel() {
 
     private val attendanceRepository = AttendanceRepository()
 
-    private val _addAttendanceResult = MutableLiveData<Boolean>()
-    val addAttendanceResult : LiveData<Boolean> = _addAttendanceResult
+    private val _addAttendanceResult = MutableLiveData< Pair<Boolean,String?>>()
+    val addAttendanceResult : LiveData<Pair<Boolean, String?>> get() = _addAttendanceResult
 
     fun addAttendance(activityId: String, date: String){
         viewModelScope.launch {
@@ -81,7 +82,29 @@ class MainViewModel : ViewModel() {
 
     val currentUserEmail = AuthManager.getCurrentUser()?.email
 
+    private val participantAttendanceRepository = ParticipantAttendanceRepository()
 
+    private val _addAllResult = MutableLiveData<Boolean>()
+    val addAllResult : LiveData<Boolean> = _addAllResult
 
+    fun addAllPtToAttendance(activityId : String, attendanceId : String){
+        viewModelScope.launch {
+            val result = participantAttendanceRepository.addAllParticipantsToAttendance(activityId,attendanceId)
+            _addAllResult.value = result
+        }
+
+    }
+
+    private val _approveParticipantResult = MutableLiveData<Boolean>()
+    val approveParticipantResult : LiveData<Boolean> = _approveParticipantResult
+
+    fun approveParticipant( activityId: String,
+                            attendanceId: String,
+                            participantId: Int){
+        viewModelScope.launch {
+            val result = participantAttendanceRepository.approveParticipant(activityId,attendanceId,participantId)
+            _approveParticipantResult.value = result
+        }
+    }
 
 }

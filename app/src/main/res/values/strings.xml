@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">stajokulu2025yoklama</string>
+    <string name="app_name">attendnce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="camera_placeholder">Camera preview placeholder</string>
+
+    <!-- res/values/strings.xml -->
+    <string-array name="attendance_methods">
+        <item>Kimlik ile</item>
+        <item>NFC ile</item>
+        <item>Kart ile</item>
+        <item>Manuel</item>
+    </string-array>
+
 </resources>

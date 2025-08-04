@@ -4,4 +4,8 @@ data class Participant(
     val id: Int = 0,
     val uuid: String = "",
     val name: String = ""
-)
+){
+    override fun toString(): String {
+        return name
+    }
+}

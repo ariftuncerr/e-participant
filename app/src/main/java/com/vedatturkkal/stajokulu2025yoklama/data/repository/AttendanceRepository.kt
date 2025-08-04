@@ -10,15 +10,15 @@ class AttendanceRepository {
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    suspend fun addAttendance(activityId: String, date: String): Boolean {
-        val uid = auth.currentUser?.uid ?: return false
+    suspend fun addAttendance(activityId: String, date: String) : Pair<Boolean, String?> {
+        val uid = auth.currentUser?.uid ?: return Pair(false, null)
         return try {
             val attendanceRef = firestore.collection("users")
                 .document(uid)
                 .collection("activities")
                 .document(activityId)
                 .collection("attendance")
-                .document() // otomatik ID
+                .document() // otomatik ID oluşturur
 
             val attendance = Attendance(
                 id = attendanceRef.id,
@@ -26,9 +26,9 @@ class AttendanceRepository {
             )
 
             attendanceRef.set(attendance).await()
-            true
+            Pair(true, attendanceRef.id) // başarı ve ID'yi döner
         } catch (e: Exception) {
-            false
+            Pair(false, null) // hata durumunda başarısızlık ve null ID
         }
     }
 
