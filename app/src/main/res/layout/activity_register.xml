@@ -5,7 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.RegisterActivity">
+    tools:context=".ui.auth.RegisterActivity"
+    android:background="@drawable/bg_image"
+    >
+
+    <TextView
+        android:id="@+id/registerTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Register"
+        android:textColor="@color/md_theme_onPrimaryFixed"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameLayout"
@@ -13,12 +28,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="140dp"
         android:layout_marginEnd="16dp"
         android:hint="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/registerTxt">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nameEditTxt"
@@ -67,11 +82,14 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/registerBtn"
-        android:layout_width="379dp"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="16dp"
         android:onClick="onRegisterClick"
         android:text="Register"
         app:cornerRadius="12dp"
@@ -79,16 +97,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordLayoutReg" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Register"
-        android:textColor="@color/md_theme_onPrimaryFixed"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/loginIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/signup"
+        app:layout_constraintEnd_toEndOf="@+id/registerBtn"
+        app:layout_constraintTop_toTopOf="@+id/registerBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
