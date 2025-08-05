@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.vedatturkkal.stajokulu2025yoklama.R
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.databinding.ActivityMainBinding
 import com.vedatturkkal.stajokulu2025yoklama.ui.auth.LoginActivity
 import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.AttendanceFragment
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendanceSchdule.AttendanceScheduleFragment
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.home.HomeFragment
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.settings.SettingsFragment
 import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
 import kotlin.getValue
 

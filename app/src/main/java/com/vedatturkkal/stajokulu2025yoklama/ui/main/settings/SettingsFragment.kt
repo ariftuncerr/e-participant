@@ -1,10 +1,10 @@
-package com.vedatturkkal.stajokulu2025yoklama.ui.main
+package com.vedatturkkal.stajokulu2025yoklama.ui.main.settings
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.vedatturkkal.stajokulu2025yoklama.R
 
 // Admin in ayarlarının olduğu kısımdır.

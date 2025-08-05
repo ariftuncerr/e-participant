@@ -1,28 +1,25 @@
-package com.vedatturkkal.stajokulu2025yoklama.ui.main
+package com.vedatturkkal.stajokulu2025yoklama.ui.main.home
 
+import android.R
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.fragment.app.viewModels
-import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentHomeBinding
-import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
+import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentHomeBinding
 import com.vedatturkkal.stajokulu2025yoklama.ui.adapters.ParticipantListAdapter
+import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-//Kullanıcı ismi Etkinlik Adı yer alacak fragment
-//Kullancı bir etkinlik oluşturur Staj Okulu 2025 gibi
-//Etkinliğe ait kullanıcılar kaydeder. (NFC isim okuma ya da manuel)
 
 class HomeFragment : Fragment() {
     private lateinit var binding : FragmentHomeBinding
@@ -143,7 +140,8 @@ class HomeFragment : Fragment() {
             activities.add(activity)
         }
 
-        val dropDownAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,android.R.id.text1,activities)
+        val dropDownAdapter =
+            ArrayAdapter(requireContext(), R.layout.simple_list_item_1, R.id.text1, activities)
        ( binding.activitiesDropdown as AutoCompleteTextView).setAdapter(dropDownAdapter)
 
     }
