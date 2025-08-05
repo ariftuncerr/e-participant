@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    /*<uses-feature
+    <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/ThemeOverlay.AppTheme.MediumContrast"
+        android:theme="@style/Theme.AppTheme"
         tools:targetApi="31">
         <activity
             android:name=".ui.auth.RegisterActivity"
@@ -33,20 +33,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".GunlukYoklamaListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TakvimActivity"
-            android:exported="false" />
-        <activity
-            android:name=".YoklamaListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false">
 
-        </activity>
     </application>
 
 </manifest>

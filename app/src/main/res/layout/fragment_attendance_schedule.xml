@@ -8,8 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/md_theme_inverseOnSurface">
+        android:layout_height="match_parent">
 
         <Spinner
             android:id="@+id/activityListSpinner"
@@ -18,7 +17,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/md_theme_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/primary"
             android:text="Select Date"
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +52,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/md_theme_background_mediumContrast"
             app:layout_constraintBottom_toTopOf="@+id/takeExcelBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +64,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary"
             android:text="Take Excel Output"
             android:textSize="12dp"
             app:cornerRadius="12dp"

@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_home -> replaceFragment(HomeFragment())
                 R.id.action_takeAttendance -> replaceFragment(AttendanceFragment())
                 R.id.action_attendanceList -> replaceFragment(AttendanceScheduleFragment())
-                R.id.action_settings -> replaceFragment(SettingsFragment())
                 else -> true
             }
             true

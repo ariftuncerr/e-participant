@@ -1,13 +1,11 @@
 package com.vedatturkkal.stajokulu2025yoklama.ui.main.home
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,145 +20,106 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
-    private lateinit var binding : FragmentHomeBinding
-    private val mainViewModel : MainViewModel by viewModels()
-    private var selectedActivity : Activity? = null
-    private var userActivityList : List<Activity>? = emptyList()
+
+    private lateinit var binding: FragmentHomeBinding
+    private val mainViewModel: MainViewModel by viewModels()
+    private var selectedActivity: Activity? = null
+    private var userActivityList: List<Activity> = emptyList()
     private lateinit var participantListAdapter: ParticipantListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-
-        //adding activity
-        binding.addActiviyBtn.setOnClickListener { view ->
-            if (binding.addActivityCard.isVisible) binding.addActivityCard.visibility = View.GONE else binding.addActivityCard.visibility = View.VISIBLE
-
-            binding.addActivityButton.setOnClickListener { view ->
-                val activityTitle = binding.addActivityEditText.text.toString()
-                if (activityTitle.isNotEmpty()){
-                    val activity = Activity(title = activityTitle)
-                    lifecycleScope.launch {
-                        mainViewModel.createActivity(activity)
-                    }
-                    binding.addActivityCard.visibility = View.GONE
-                }
-                else
-                    Snackbar.make(view,"Aktivite Başlığı Girmelisin!!", Snackbar.LENGTH_SHORT).show()
-
-            }
-
+        // 🟢 Aktivite Ekle Butonu
+        binding.addActiviyBtn.setOnClickListener {
+            AddActivityDialogFragment().show(childFragmentManager, "AddActivityDialog")
         }
-        //selected activity
-        (binding.activitiesDropdown as AutoCompleteTextView).setOnItemClickListener { parent, view, position, id ->
-            selectedActivity = userActivityList?.get(position)
+
+        // 🟢 Aktivite seçilince katılımcı listesi yüklenir
+        (binding.activitiesDropdown as AutoCompleteTextView).setOnItemClickListener { _, _, position, _ ->
+            selectedActivity = userActivityList[position]
             selectedActivity?.let {
-                println("Seçilen aktivite: ${it.title}")
-                mainViewModel.getParticipants(it.id) //
+                mainViewModel.getParticipants(it.id)
             }
         }
 
-
-        //adding participant to selected activity
-        binding.addParticipantBtn.setOnClickListener { l ->
-            val participantName = binding.participantEditText.text.toString()
-            if(participantName.isNotEmpty()){
-                selectedActivity?.let {
-                    lifecycleScope.launch {
-                        mainViewModel.addParticipant(selectedActivity!!.id,participantName)
-                    } ?: Snackbar.make(l,"Aktivite Seçmelisin!!", Snackbar.LENGTH_SHORT).show()
-                }
-
-            }
-            else{
-                Snackbar.make(l,"Katılımcı ismi girmelisin!!", Snackbar.LENGTH_SHORT).show()
-            }
+        // 🟢 Katılımcı Ekleme Kartına Tıklama
+        binding.cardView.setOnClickListener {
+            selectedActivity?.let {
+                AddParticipantDialogFragment(it.id).show(childFragmentManager, "AddParticipantDialog")
+            } ?: Snackbar.make(binding.root, "Lütfen önce bir aktivite seç!", Snackbar.LENGTH_SHORT).show()
         }
 
         observeViewModel()
-
         mainViewModel.getActivities()
+
         return binding.root
     }
-    private fun observeViewModel(){
-        //observe add activity
-        lifecycleScope.launch {
-            mainViewModel.addActivityResult.observe (viewLifecycleOwner) { success ->
-                if (success)
-                    Snackbar.make(binding.root,"Aktivite Başarıyla Eklendi", Snackbar.LENGTH_SHORT).show()
-                else
-                    Snackbar.make(binding.root,"Aktivite eklenirken Hata Oluştu", Snackbar.LENGTH_SHORT).show()
 
-            }
-        }
-        //observe getting activities
+    private fun observeViewModel() {
+        // ✅ Aktivite Ekleme Sonucu
         lifecycleScope.launch {
-            mainViewModel.activitiesResult.collectLatest { userActivitiesList ->
-                userActivityList = userActivitiesList
-                setUpUserActivities(userActivitiesList)
-
-            }
-        }
-
-        //observe adding participant to selected activity
-        lifecycleScope.launch {
-            mainViewModel.addParticipantResult.observe (viewLifecycleOwner){ success ->
-                if (success){
-                    Snackbar.make(binding.root,"Katılımcı Başarıyla Eklendi", Snackbar.LENGTH_SHORT).show()
-                    binding.participantEditText.text?.clear()
+            mainViewModel.addActivityResult.observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    Snackbar.make(binding.root, "Aktivite başarıyla eklendi", Snackbar.LENGTH_SHORT).show()
+                    mainViewModel.getActivities()
+                } else {
+                    Snackbar.make(binding.root, "Aktivite eklenirken hata oluştu", Snackbar.LENGTH_SHORT).show()
                 }
-                else
-                    Snackbar.make(binding.root,"Katılımcı eklenirken Hata Oluştu", Snackbar.LENGTH_SHORT).show()
             }
         }
 
-        // getting activity participants
-        var isFirst = true
+        // ✅ Kullanıcı Aktiviteleri
         lifecycleScope.launch {
-           mainViewModel.participantList.collectLatest { pList ->
-               if (isFirst){
-                   showParticipants(pList)
-                   isFirst = false
-               }
-               else{
-                   updateParticipantList(pList)
-               }
-           }
+            mainViewModel.activitiesResult.collectLatest { activities ->
+                userActivityList = activities
+                setUpUserActivities(activities)
+            }
         }
 
-
-
-    }
-    private fun setUpUserActivities(activitiesList : List<Activity>){
-        var activities = mutableListOf<Activity>()
-        for (activity in activitiesList){
-            activities.add(activity)
+        // ✅ Katılımcı Ekleme Sonucu
+        lifecycleScope.launch {
+            mainViewModel.addParticipantResult.observe(viewLifecycleOwner) { success ->
+                Snackbar.make(binding.root, "Katılımcı başarıyla eklendi", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
-        val dropDownAdapter =
-            ArrayAdapter(requireContext(), R.layout.simple_list_item_1, R.id.text1, activities)
-       ( binding.activitiesDropdown as AutoCompleteTextView).setAdapter(dropDownAdapter)
-
+        // ✅ Katılımcı Listesi
+        lifecycleScope.launch {
+            mainViewModel.participantList.collectLatest { participants ->
+                if (::participantListAdapter.isInitialized) {
+                    updateParticipantList(participants)
+                } else {
+                    showParticipants(participants)
+                }
+            }
+        }
     }
 
-    private fun showParticipants(pList: List<Participant>) {
-        participantListAdapter = ParticipantListAdapter(requireContext(), pList) { participant ->
+    private fun setUpUserActivities(activities: List<Activity>) {
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            activities.map { it.title }
+        )
+        (binding.activitiesDropdown as AutoCompleteTextView).setAdapter(adapter)
+    }
+
+    private fun showParticipants(participants: List<Participant>) {
+        participantListAdapter = ParticipantListAdapter(requireContext(), participants) { participant ->
             selectedActivity?.let {
                 mainViewModel.deleteParticipant(it.id, participant.id)
             }
         }
 
-        binding.participantsRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.participantsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.participantsRecyclerView.adapter = participantListAdapter
     }
 
-
-    private fun updateParticipantList(pList: List<Participant>) {
-        participantListAdapter.updateList(pList)
+    private fun updateParticipantList(participants: List<Participant>) {
+        participantListAdapter.updateList(participants)
     }
-
 }

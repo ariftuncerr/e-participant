@@ -5,9 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.RegisterActivity"
-    android:background="@drawable/bg_image"
-    >
+    tools:context=".ui.auth.RegisterActivity">
 
     <TextView
         android:id="@+id/registerTxt"
@@ -16,7 +14,7 @@
         android:layout_marginTop="72dp"
         android:fontFamily="sans-serif-medium"
         android:text="Register"
-        android:textColor="@color/md_theme_onPrimaryFixed"
+        android:textColor="@color/text600"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +88,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="16dp"
-        android:onClick="onRegisterClick"
         android:text="Register"
         app:cornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
