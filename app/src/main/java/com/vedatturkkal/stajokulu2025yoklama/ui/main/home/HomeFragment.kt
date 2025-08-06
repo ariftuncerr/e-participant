@@ -1,5 +1,6 @@
 package com.vedatturkkal.stajokulu2025yoklama.ui.main.home
 
+import ExcelImportParticipantDialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,12 @@ class HomeFragment : Fragment() {
                 AddParticipantDialogFragment(it.id).show(childFragmentManager, "AddParticipantDialog")
             } ?: Snackbar.make(binding.root, "Lütfen önce bir aktivite seç!", Snackbar.LENGTH_SHORT).show()
         }
+        binding.importExceImageView.setOnClickListener {
+            selectedActivity?.let {
+                ExcelImportParticipantDialogFragment(it.id).show(childFragmentManager, "ImportExcelDialog")
+            } ?: Snackbar.make(binding.root, "Lütfen önce bir aktivite seç!", Snackbar.LENGTH_SHORT).show()
+        }
+
 
         observeViewModel()
         mainViewModel.getActivities()

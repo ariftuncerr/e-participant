@@ -87,5 +87,10 @@ dependencies {
     // Lifecycle (zaten varsa birleştir)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
+    implementation ("org.apache.poi:poi-ooxml:5.2.3")
+    implementation ("org.apache.poi:poi:5.2.3")
+
+
+
 
 }
