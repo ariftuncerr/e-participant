@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vedatturkkal.stajokulu2025yoklama.R
@@ -41,7 +42,7 @@ class ParticipantListAdapter (
 
     class ParticipantItemHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val participantName = itemView.findViewById<TextView>(R.id.participantNameText)
-        val deleteParticipantBtn = itemView.findViewById<ImageButton>(R.id.deleteParticipantBtn)
+        val deleteParticipantBtn = itemView.findViewById<ImageView>(R.id.deleteParticipantBtn)
     }
 
      fun updateList(newList : List<Participant>){
