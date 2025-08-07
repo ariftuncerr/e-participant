@@ -1,5 +1,6 @@
-package com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance
+package com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.methodDialog
 
+import android.R
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -76,7 +77,7 @@ class ManualEntryDialogFragment(
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
+            R.layout.simple_dropdown_item_1line,
             allParticipants
         )
         binding.manuelNameDropdown.setAdapter(adapter)

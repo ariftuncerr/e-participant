@@ -4,18 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
+import com.vedatturkkal.stajokulu2025yoklama.data.model.ParticipantAttendance
+import com.vedatturkkal.stajokulu2025yoklama.data.repo.ParticipantAttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ActivityRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthManager
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.AuthRepository
-import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantAttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.data.repository.ParticipantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class MainViewModel : ViewModel() {
     private val activityRepository = ActivityRepository()
@@ -73,9 +76,9 @@ class MainViewModel : ViewModel() {
     private val _addAttendanceResult = MutableLiveData< Pair<Boolean,String?>>()
     val addAttendanceResult : LiveData<Pair<Boolean, String?>> get() = _addAttendanceResult
 
-    fun addAttendance(activityId: String, date: String){
+    fun addAttendance(activityId: String, date: String,title : String){
         viewModelScope.launch {
-            val result = attendanceRepository.addAttendance(activityId,date)
+            val result = attendanceRepository.addAttendance(activityId,date,title)
             _addAttendanceResult.value = result
         }
     }
@@ -108,5 +111,22 @@ class MainViewModel : ViewModel() {
             _approveParticipantResult.value = result
         }
     }
+
+    private val _participantAttendanceList = MutableStateFlow<List<ParticipantAttendance>>(emptyList())
+    val participantAttendanceList: StateFlow<List<ParticipantAttendance>> = _participantAttendanceList
+
+   /* fun getParticipantAttendances(activityId: String, attendanceId: String) {
+        viewModelScope.launch {
+            try {
+                val list = participantAttendanceRepository.getAllParticipantAttendances(activityId, attendanceId)
+                _participantAttendanceList.value = list
+            } catch (e: Exception) {
+                _participantAttendanceList.value = emptyList()
+            }
+        }
+    }*/
+
+
+
 
 }

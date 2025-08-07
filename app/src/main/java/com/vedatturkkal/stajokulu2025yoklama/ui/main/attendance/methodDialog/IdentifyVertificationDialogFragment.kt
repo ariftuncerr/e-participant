@@ -1,4 +1,4 @@
-package com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance
+package com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.methodDialog
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,7 +8,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment

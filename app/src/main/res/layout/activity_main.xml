@@ -11,14 +11,19 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
+        android:background="@color/primary100"
         app:backgroundTint="@color/primary50"
+        app:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/battom_nav"
-        app:shapeAppearance="@style/BottomNavRoundedTop"
-        app:shapeAppearanceOverlay="@style/BottomNavRoundedTop" />
+        app:itemIconSize="24dp"
+        app:itemTextColor="@color/text950"
+        app:itemIconTint="@color/text950"
+        app:labelVisibilityMode="labeled"
+        app:shapeAppearanceOverlay="@style/BottomNavRoundedTop"/>
+
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"

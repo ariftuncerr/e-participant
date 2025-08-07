@@ -1,172 +1,209 @@
+// AttendanceFragment.kt
 package com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance
 
+import ParticipantAttendanceAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Activity
 import com.vedatturkkal.stajokulu2025yoklama.data.model.Participant
+import com.vedatturkkal.stajokulu2025yoklama.data.repo.ParticipantAttendanceRepository
 import com.vedatturkkal.stajokulu2025yoklama.databinding.FragmentAttendanceBinding
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.attendanceDialog.AddAttendanceDialogFragment
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.methodDialog.IdentityVerificationDialogFragment
+import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.methodDialog.ManualEntryDialogFragment
 import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
+import com.vedatturkkal.stajokulu2025yoklama.viewmodel.ParticipantAttendanceViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import androidx.fragment.app.viewModels
 
 class AttendanceFragment : Fragment() {
 
     private var _binding: FragmentAttendanceBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: MainViewModel by viewModels()
 
     private var currentAttendanceId: String? = null
     private var selectedActivity: Activity? = null
-    private var participantList : List<Participant> = emptyList()
+    private var participantList: List<Participant> = emptyList()
 
-    private var selectedMethod : String? = null
+    // Hilt yok: custom factory ile
+    private val attendanceVM: ParticipantAttendanceViewModel by viewModels {
+        PAViewModelFactory(ParticipantAttendanceRepository())
+    }
+
+    private var selectedMethod: String? = null
+
+    private lateinit var adapter: ParticipantAttendanceAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
-        val view : View = binding.root
+        val view: View = binding.root
 
-        setupActivitySpinner()
-        setupMethodSpinner()
-        observeViewModel()
+        adapter = ParticipantAttendanceAdapter(
+            onApprove = { pid -> withIds { aId, attId -> attendanceVM.approve(aId, attId, pid) } },
+            onUnapprove = { pid -> withIds { aId, attId -> attendanceVM.unapprove(aId, attId, pid) } },
+            onReject = { pid -> withIds { aId, attId -> attendanceVM.reject(aId, attId, pid) } },
+            onUnreject = { pid -> withIds { aId, attId -> attendanceVM.unreject(aId, attId, pid) } }
+        )
+        binding.attendanceParticipantsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.attendanceParticipantsRecyclerView.adapter = adapter
 
-        binding.startAttendanceBtn.setOnClickListener { view ->
-            takeAttendanceClick(view)
-        }
-
-        binding.createAttendanceBtn.setOnClickListener { view ->
-            addAttendance()
-        }
-
-        return view
-
-
-    }
-    //clickable functions
-    private fun takeAttendanceClick (view : View){
-
-        if (selectedMethod == "Manuel" && selectedActivity != null && currentAttendanceId != null) {
-            val dialog = ManualEntryDialogFragment(selectedActivity!!.id,currentAttendanceId!!,participantList)
-
-            dialog.show(parentFragmentManager, "ManualEntryDialog")
-        }
-        else if (selectedMethod == "Kimlik ile" && selectedActivity != null && currentAttendanceId != null) {
-            val dialog = IdentityVerificationDialogFragment(selectedActivity!!.id,currentAttendanceId!!,participantList)
-
-            dialog.show(parentFragmentManager, "IdentifyVerificationDialog")
-        }
-        else Snackbar.make(binding.root,"Aktivite ve Method seçimi Zorunlu!", Snackbar.LENGTH_SHORT).show()
-    }
-
-
-    private fun getAllParticipants(){
-        selectedActivity?.let {
-            viewModel.getParticipants(it.id)
-        }
-        lifecycleScope.launch {
-            viewModel.participantList.collectLatest { list ->
-                participantList = list
-                println(participantList)
+        // Yoklama başlat
+        binding.startAttendanceBtn.setOnClickListener {
+            if (selectedActivity == null) {
+                Toast.makeText(requireContext(), "Lütfen bir aktivite seçin", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            AddAttendanceDialogFragment(selectedActivity!!.id).show(parentFragmentManager, "AddAttendanceDialog")
         }
-    }
 
-    private fun setupActivitySpinner() {
-        viewModel.getActivities()
-        lifecycleScope.launch {
-            viewModel.activitiesResult.collectLatest { activityList ->
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    activityList
-                )
+        // Dialog dönüşü: attendanceId geldiğinde önce herkesi ekle sonra canlı dinlemeyi başlat
+        setFragmentResultListener("addAttendanceResultKey") { _, bundle ->
+            val attId = bundle.getString("attendanceId") ?: return@setFragmentResultListener
+            currentAttendanceId = attId
 
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.activitiesSpinner.adapter = adapter
-
-                binding.activitiesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                        selectedActivity = activityList.getOrNull(position)
-
-                        getAllParticipants()
+            withIds { aId, _ ->
+                lifecycleScope.launch {
+                    val ok = attendanceVM.addAll(aId, attId)  // <-- Boolean döndürüyor
+                    if (ok) {
+                        Snackbar.make(binding.root, "Tüm katılımcılar yoklamaya eklendi", Snackbar.LENGTH_SHORT).show()
+                    } else {
+                        Snackbar.make(binding.root, "Katılımcılar eklenemedi!", Snackbar.LENGTH_SHORT).show()
                     }
-
-                    override fun onNothingSelected(parent: AdapterView<*>) {
-                        selectedActivity = null
-                    }
+                    attendanceVM.startListening(aId, attId)
                 }
             }
         }
-    }
 
-    private fun addAttendance() {
-        if (selectedActivity == null) {
-            Toast.makeText(requireContext(), "Lütfen bir aktivite seçin", Toast.LENGTH_SHORT).show()
-        }
-        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        viewModel.addAttendance(selectedActivity!!.id, currentDate)
+        setupActivityDropdown()
+        observeViewModel()
+        setupMethodClickListeners()
 
-    }
-
-    private fun setupMethodSpinner() {
-        val methods = resources.getStringArray(com.vedatturkkal.stajokulu2025yoklama.R.array.attendance_methods)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, methods)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.methodsSpinner.adapter = adapter
-
-        binding.methodsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                selectedMethod = parent.getItemAtPosition(position).toString()
+        // Add All / Remove All
+        binding.addAll.setOnClickListener {
+            withIds { aId, attId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val ok = attendanceVM.addAll(aId, attId)
+                    Snackbar.make(
+                        binding.root,
+                        if (ok) "Tüm katılımcılar yoklamaya eklendi" else "Ekleme başarısız!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    // Dinleme başlamadıysa güvence olsun:
+                    attendanceVM.startListening(aId, attId)
+                }
             }
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+        binding.removeAll.setOnClickListener {
+            withIds { aId, attId ->
+                attendanceVM.removeAll(aId, attId)
+                Snackbar.make(binding.root, "Yoklamadan tüm katılımcılar kaldırıldı", Snackbar.LENGTH_SHORT).show()
+                // Canlı dinleme açıksa, liste otomatik boşalır. Değilse:
+                // adapter.submitList(emptyList())
+            }
+        }
+
+        return view
+    }
+
+    private inline fun withIds(block: (activityId: String, attendanceId: String) -> Unit) {
+        val aId = selectedActivity?.id
+        val attId = currentAttendanceId
+        if (aId == null || attId == null) {
+            Toast.makeText(requireContext(), "Lütfen önce yoklama başlatın", Toast.LENGTH_SHORT).show()
+            return
+        }
+        block(aId, attId)
+    }
+
+    private fun setupMethodClickListeners() {
+        binding.manuelMethod.setOnClickListener { openMethodDialog("Manuel") }
+        binding.idCheckMethod.setOnClickListener { openMethodDialog("Kimlik ile") }
+        binding.nfcCheckMethod.setOnClickListener { openMethodDialog("NFC") }
+        binding.cardCheckMethod.setOnClickListener { openMethodDialog("Kart") }
+        binding.qrMethod.setOnClickListener { openMethodDialog("QR") }
+    }
+
+    private fun openMethodDialog(method: String) {
+        if (selectedActivity == null || currentAttendanceId == null) {
+            Toast.makeText(requireContext(), "Lütfen önce yoklama başlatın", Toast.LENGTH_SHORT).show()
+            return
+        }
+        when (method) {
+            "Manuel" -> ManualEntryDialogFragment(
+                selectedActivity!!.id, currentAttendanceId!!, participantList
+            ).show(parentFragmentManager, "ManualEntryDialog")
+
+            "Kimlik ile" -> IdentityVerificationDialogFragment(
+                selectedActivity!!.id, currentAttendanceId!!, participantList
+            ).show(parentFragmentManager, "IdentityVerificationDialog")
+        }
+    }
+
+    private fun getAllParticipants() {
+        selectedActivity?.let { viewModel.getParticipants(it.id) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.participantList.collectLatest { list -> participantList = list }
+        }
+    }
+
+    private fun setupActivityDropdown() {
+        viewModel.getActivities()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.activitiesResult.collectLatest { activityList ->
+                val activityNames = activityList.map { it.title }
+                val ddAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    activityNames
+                )
+                binding.activitiesDropdown.setAdapter(ddAdapter)
+                binding.activitiesDropdown.setOnItemClickListener { _, _, position, _ ->
+                    selectedActivity = activityList[position]
+                    getAllParticipants()
+                }
+            }
         }
     }
 
     private fun observeViewModel() {
-        // add Attendance
-        viewModel.addAttendanceResult.observe (viewLifecycleOwner) { result ->
-            val (success,currentId) = result
-            if(success){
-                Snackbar.make(binding.root,"Yoklama Oluşturuldu", Snackbar.LENGTH_SHORT).show()
-                currentId.let {
-                    currentAttendanceId = it
-                }
-                viewModel.addAllPtToAttendance(selectedActivity!!.id,currentAttendanceId!!)
-
-                println(currentAttendanceId)
-            }
-            else{
-                Toast.makeText(requireContext(),"Yoklama başlatılırken Hata", Toast.LENGTH_SHORT).show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            attendanceVM.items.collectLatest { list ->
+                adapter.submitList(list)
             }
         }
-
-        viewModel.addAllResult.observe (viewLifecycleOwner) { success ->
-            if (success)
-                Snackbar.make(binding.root,"Tüm katılımcılar Yoklama Listesine Eklendi", Snackbar.LENGTH_SHORT).show()
-            else
-                Snackbar.make(binding.root,"Tüm katılımcılar Yoklama Listesine Eklenemedi!", Snackbar.LENGTH_SHORT).show()
-
-        }
-
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // --- Custom Factory (Hilt yokken şart) ---
+    private class PAViewModelFactory(
+        private val repo: ParticipantAttendanceRepository
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ParticipantAttendanceViewModel::class.java)) {
+                return ParticipantAttendanceViewModel(repo) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+        }
     }
 }

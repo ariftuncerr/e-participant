@@ -17,14 +17,16 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="Aktivite Seç"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusBottomEnd="12dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
                 android:id="@+id/activitiesDropdown"
@@ -38,20 +40,22 @@
             android:id="@+id/cardSectionLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/activitiesDropdownLayout"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/activitiesDropdownLayout">
 
             <!-- Kart 1 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
-                android:layout_width="110dp"
+                android:layout_width="115dp"
                 android:layout_height="130dp"
                 app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -63,28 +67,28 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
                         android:src="@drawable/add_participant"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/addPText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/poppins"
                         android:text="Katılımcı Ekle"
-                        app:layout_constraintTop_toBottomOf="@id/addPImageView"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/addPImageView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Kart 2 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView3"
-                android:layout_width="110dp"
+                android:layout_width="115dp"
                 android:layout_height="130dp"
-                android:layout_marginStart="8dp"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cardView2"
@@ -110,6 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/poppins"
                         android:text="Excelden Aktar"
                         android:textAlignment="center"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +126,7 @@
             <!-- Kart 3 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView2"
-                android:layout_width="110dp"
+                android:layout_width="115dp"
                 android:layout_height="130dp"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -147,6 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/poppins"
                         android:text="Formdan Aktar"
                         android:textAlignment="center"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -156,74 +162,69 @@
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Katılımcı Başlık Satırı -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <!-- Modern Arama Alanı -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchParticipantLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardSectionLayout">
+            app:layout_constraintTop_toBottomOf="@+id/participantsTxt"
+            app:startIconDrawable="@drawable/baseline_search_24">
 
-            <TextView
-                android:id="@+id/pNo"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchParticipantEditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="No"
-                android:textColor="@color/text500"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/pName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="Katılımcı"
-                android:textColor="@color/text500"
-                app:layout_constraintStart_toEndOf="@id/pNo" />
-
-            <TextView
-                android:id="@+id/pEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:text="Düzenle"
-                android:textColor="@color/text500"
-                app:layout_constraintEnd_toStartOf="@+id/pDelete" />
-
-            <TextView
-                android:id="@+id/pDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="Sil"
-                android:textColor="@color/text500"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:hint="İsim ile ara"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Katılımcı Listesi -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/participantsRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/searchParticipantLayout" />
 
-        <!-- Etkinlik Ekle FAB -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addActiviyBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:src="@drawable/baseline_add_24"
             app:backgroundTint="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/participantsTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_extra_bold"
+            android:text="Katılımcılar"
+            android:textColor="@color/text800"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardSectionLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

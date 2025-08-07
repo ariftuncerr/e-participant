@@ -12,4 +12,11 @@
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
+
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/primary</item>
+        <item name="itemTextColor">@color/text500</item>
+        <item name="itemRippleColor">@color/primary</item>
+        <item name="itemActiveIndicatorStyle">@null</item>
+    </style>
 </resources>
