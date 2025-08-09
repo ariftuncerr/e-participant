@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Tüm köşeleri yuvarlatılmış daire şekli -->
     <style name="CircleShape">
-    <item name="cornerFamily">rounded</item>
-    <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
+    <!-- Sadece üst köşeleri yuvarlatılmış şekil -->
     <style name="BottomNavRoundedTop" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">24dp</item>
@@ -13,10 +16,20 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemIconTint">@color/primary</item>
-        <item name="itemTextColor">@color/text500</item>
-        <item name="itemRippleColor">@color/primary</item>
-        <item name="itemActiveIndicatorStyle">@null</item>
+    <!-- BottomNavigationView aktif item arka plan stili -->
+    <style name="BottomNav.ActiveIndicator">
+        <item name="android:insetLeft">6dp</item>
+        <item name="android:insetRight">6dp</item>
+        <item name="android:insetTop">4dp</item>
+        <item name="android:insetBottom">4dp</item>
+        <item name="shapeAppearanceOverlay">@style/Shape.Pill</item>
+        <item name="backgroundColor">@color/primary50</item>
     </style>
+
+    <!-- Tam oval köşe tanımı (Material 3 uyumlu) -->
+    <style name="Shape.Pill" parent="ShapeAppearance.Material3.Corner.Full"/>
+
+    <!-- Alias: Eğer eski kodlarda @style/BottomNav geçiyorsa hatasız çalışsın -->
+    <style name="BottomNav" parent="BottomNav.ActiveIndicator" />
+
 </resources>

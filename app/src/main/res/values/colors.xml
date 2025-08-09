@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <color name="card1_bg">#801DA1F2</color>  <!-- %50 opak Mavi -->
     <color name="card2_bg">#80E91E63</color>  <!-- %50 opak Pembe -->
@@ -48,5 +48,8 @@
     <color name="text950">#1E1E1E</color>
 
     <color name="white">#FFFFFF</color>          <!-- Simge ve metin için -->
+    <!-- res/color/ripple_color.xml -->
+
+
 
 </resources>

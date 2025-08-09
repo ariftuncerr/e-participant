@@ -153,6 +153,7 @@ class AttendanceFragment : Fragment() {
                 selectedActivity!!.id, currentAttendanceId!!, participantList
             ).show(parentFragmentManager, "IdentityVerificationDialog")
         }
+
     }
 
     private fun getAllParticipants() {

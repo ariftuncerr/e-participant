@@ -19,7 +19,6 @@ import com.vedatturkkal.stajokulu2025yoklama.ui.auth.LoginActivity
 import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.AttendanceFragment
 import com.vedatturkkal.stajokulu2025yoklama.ui.main.attendance.AttendanceScheduleFragment
 import com.vedatturkkal.stajokulu2025yoklama.ui.main.home.HomeFragment
-import com.vedatturkkal.stajokulu2025yoklama.ui.main.settings.SettingsFragment
 import com.vedatturkkal.stajokulu2025yoklama.viewmodel.MainViewModel
 import kotlin.getValue
 
@@ -41,12 +40,22 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
+        binding.materialToolbar.title = "Etkinlik Yönetim"
         replaceFragment(HomeFragment())
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
-                R.id.action_home -> replaceFragment(HomeFragment())
-                R.id.action_takeAttendance -> replaceFragment(AttendanceFragment())
-                R.id.action_attendanceList -> replaceFragment(AttendanceScheduleFragment())
+                R.id.action_home -> {
+                    replaceFragment(HomeFragment())
+                    binding.materialToolbar.title = "Etkinlik Yönetim"
+                }
+                R.id.action_takeAttendance -> {
+                    replaceFragment(AttendanceFragment())
+                    binding.materialToolbar.title = "Etkinlik Kontrol"
+                }
+                R.id.action_attendanceList -> {
+                    replaceFragment(AttendanceScheduleFragment())
+                    binding.materialToolbar.title = "Etkinlik Rapor"
+                }
                 else -> true
             }
             true

@@ -7,22 +7,42 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/primary100"
-        app:backgroundTint="@color/primary50"
-        app:elevation="12dp"
+    <!-- parent ConstraintLayout varsayımıyla -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="412dp"
+        android:layout_height="143dp"
+        android:clipToOutline="true"
+        android:clipToPadding="false"
+        app:cardBackgroundColor="#FAFAFA"
+
+        app:cardCornerRadius="28dp"
+        app:cardElevation="14dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/battom_nav"
-        app:itemIconSize="24dp"
-        app:itemTextColor="@color/text950"
-        app:itemIconTint="@color/text950"
-        app:labelVisibilityMode="labeled"
-        app:shapeAppearanceOverlay="@style/BottomNavRoundedTop"/>
+        app:strokeColor="@color/primary100"
+        app:strokeWidth="1dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:paddingStart="12dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp"
+
+            app:itemActiveIndicatorStyle="@style/BottomNav.ActiveIndicator"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/text950"
+            app:itemRippleColor="@color/ripple_color"
+            app:itemTextColor="@color/text950"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/battom_nav" />
+    </com.google.android.material.card.MaterialCardView>
 
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -36,13 +56,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/app_name"
-        app:titleTextColor="@color/text950" />
+        app:titleCentered="false"
+        app:titleMargin="8dp"
+        app:titleTextColor="@color/primary100" />
 
     <FrameLayout
         android:id="@+id/mainFrameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

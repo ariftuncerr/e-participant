@@ -21,7 +21,6 @@ import com.vedatturkkal.stajokulu2025yoklama.utils.export.PdfExportUtil
 import com.vedatturkkal.stajokulu2025yoklama.utils.export.ExcelExportUtil
 import com.vedatturkkal.stajokulu2025yoklama.utils.export.ExportUtils
 
-
 class AttendanceScheduleFragment : Fragment() {
 
     private var _binding: FragmentAttendanceScheduleBinding? = null
@@ -120,9 +119,14 @@ class AttendanceScheduleFragment : Fragment() {
             val attendanceTime = att?.timeText ?: "-"
 
             val file = ExcelExportUtil.export(requireContext(), list, activityTitle, attendanceTitle, attendanceTime)
-            ExportUtils.shareFile(requireContext(), file, "application/pdf", "PDF çıktısını paylaş")
 
-
+            // ✅ Doğru MIME ve başlık
+            ExportUtils.shareFile(
+                requireContext(),
+                file,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Excel çıktısını paylaş"
+            )
         }
 
         binding.exportPdfCard.setOnClickListener {
@@ -141,7 +145,6 @@ class AttendanceScheduleFragment : Fragment() {
             ExportUtils.shareFile(requireContext(), file, "application/pdf", "PDF çıktısını paylaş")
         }
     }
-
 
     private fun observeFlows() {
         viewLifecycleOwner.lifecycleScope.launch {

@@ -6,21 +6,24 @@ import androidx.core.content.FileProvider
 import java.io.File
 
 object ExportUtils {
+
+    /**
+     * FileProvider authority: ${applicationId}.fileprovider
+     * AndroidManifest ve xml/file_paths ayarlı olmalı.
+     */
     fun shareFile(context: Context, file: File, mime: String, title: String) {
         val uri = FileProvider.getUriForFile(
             context,
             context.packageName + ".fileprovider",
             file
         )
-        // ExportUtils.kt
+
         val intent = Intent(Intent.ACTION_SEND).apply {
-            // HATALI: Intent.setType = mime
-            // DOĞRU:
-            type = mime // veya: setType(mime)
+            type = mime
             putExtra(Intent.EXTRA_STREAM, uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        context.startActivity(Intent.createChooser(intent, title))
 
+        context.startActivity(Intent.createChooser(intent, title))
     }
 }
