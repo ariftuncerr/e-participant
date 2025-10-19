@@ -16,7 +16,7 @@ Uygulama, **Firebase Authentication** ve **Firestore** altyapısı üzerinde ça
          width="360">
   </video>
 </div>
----
+
 ## 🚀 Özellikler
 
 ### 👤 Kullanıcı İşlemleri
@@ -122,7 +122,7 @@ com.example.eparticipant
 
 1. **Projeyi klonla**
    ```bash
-   git clone <https ... >
+   git clone <https://github.com/ariftuncerr/e-participant.git>
    ```
 
 2. **Android Studio ile aç**
