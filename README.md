@@ -8,13 +8,7 @@ Uygulama, **Firebase Authentication** ve **Firestore** altyapısı üzerinde ça
 
 ## 🎥 Demo Videosu
 
-> 📹 **Uygulamanın tanıtım videosu** 
-<div align="center">
-  <a href="https://github.com/user-attachments/assets/36ada345-ab8d-4aef-b702-b20927fccf17">
-    <img src="https://img.youtube.com/vi/VIDEO_ID_BURAYA_GELECEK/0.jpg" alt="APP DEMO">
-  </a>
-</div>
-
+[![Uygulama Tanıtım Videosu](https://github.com/user-attachments/assets/36ada345-ab8d-4aef-b702-b20927fccf17)
 ## 🚀 Özellikler
 
 ### 👤 Kullanıcı İşlemleri
