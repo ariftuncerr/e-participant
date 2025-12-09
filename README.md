@@ -8,7 +8,7 @@ Uygulama, **Firebase Authentication** ve **Firestore** altyapısı üzerinde ça
 
 ## 🎥 Demo Videosu
 <div align="center">
-  <video src=""
+  <video src="https://github.com/user-attachments/assets/015a568c-21d8-431b-a2a8-950a8cf98a67"
          controls
          muted
          loop
